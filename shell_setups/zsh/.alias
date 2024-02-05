@@ -1,0 +1,4 @@
+alias ls='ls -aF --color'
+alias home='cd ~'
+alias run_bot='cd /e/async_discord_bot ; source bot_env/bin/activate ; python -m main.main'
+alias repos='cd /e/repo'

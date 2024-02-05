@@ -1,0 +1,24 @@
+up () {
+    this="$1"
+    while [ $this -gt 0 ] ; do
+	cd ..
+	let "this--"
+    done
+}
+
+
+add_alias () {
+    name="$1"
+    command="$2"
+    if [ -z "$name" -o -z "$command" ] ; then
+	cat << EOF
+Usage: add_alias name 'command'
+adds alias to .alias list and sources allowing for instant use
+EOF
+	return 1
+    fi
+    cat << EOF >> ~/zsh/.alias
+alias $name='$command'
+EOF
+    source ~/zsh/.alias
+}
