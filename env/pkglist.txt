@@ -195,4 +195,5 @@ xorg-xwayland
 xorg-xwd
 xorg-xwininfo
 xorg-xwud
+yelp
 zsh
