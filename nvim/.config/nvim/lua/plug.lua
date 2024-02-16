@@ -26,6 +26,7 @@ return require("packer").startup({
         use {'tpope/vim-fugitive' }
         use { 'junegunn/gv.vim' }
         use { 'windwp/nvim-autopairs' }
+        use {'nvim-web-devicons'}
     end,
     config = {
         package_root = vim.fn.stdpath("config") .. "/site/pack",

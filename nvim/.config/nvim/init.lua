@@ -11,7 +11,6 @@ require('paths')
 require('opts')
 require('keys')
 
-
 -- [[ PLUGINS ]]
 require('plug')
 
