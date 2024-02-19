@@ -5,7 +5,7 @@ return require("packer").startup({
         -- [[ Put plugins here ]]
         use {
             'kyazdani42/nvim-tree.lua',
-            requires = 'kyazdani42/nvim-web-devicons'
+            requires = 'nvim-tree/nvim-web-devicons'
         }
         use { 'mhinz/vim-startify' }
         use { 'DanilaMihailov/beacon.nvim' }
@@ -26,7 +26,10 @@ return require("packer").startup({
         use {'tpope/vim-fugitive' }
         use { 'junegunn/gv.vim' }
         use { 'windwp/nvim-autopairs' }
-        use {'nvim-web-devicons'}
+        --use {'kyazdani42/nvim-web-devicons'}
+        use({'iamcco/markdown-preview.nvim',
+             run = function() vim.fn["mkdp#util#install"]() end,
+        })
     end,
     config = {
         package_root = vim.fn.stdpath("config") .. "/site/pack",
