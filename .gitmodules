@@ -1,0 +1,46 @@
+[submodule "nvim/.config/nvim/site/pack/packer/start/nvim-autopairs"]
+	path = nvim/.config/nvim/site/pack/packer/start/nvim-autopairs
+	url = https://github.com/windwp/nvim-autopairs
+[submodule "nvim/.config/nvim/site/pack/packer/start/beacon.nvim"]
+	path = nvim/.config/nvim/site/pack/packer/start/beacon.nvim
+	url = https://github.com/DanilaMihailov/beacon.nvim
+    ignore = dirty
+[submodule "nvim/.config/nvim/site/pack/packer/start/markdown-preview.nvim"]
+	path = nvim/.config/nvim/site/pack/packer/start/markdown-preview.nvim
+	url = https://github.com/iamcco/markdown-preview.nvim
+[submodule "nvim/.config/nvim/site/pack/packer/start/dracula.nvim"]
+	path = nvim/.config/nvim/site/pack/packer/start/dracula.nvim
+	url = https://github.com/Mofiqul/dracula.nvim
+[submodule "nvim/.config/nvim/site/pack/packer/start/gv.vim"]
+	path = nvim/.config/nvim/site/pack/packer/start/gv.vim
+	url = https://github.com/junegunn/gv.vim
+[submodule "nvim/.config/nvim/site/pack/packer/start/indentLine"]
+	path = nvim/.config/nvim/site/pack/packer/start/indentLine
+	url = https://github.com/Yggdroot/indentLine
+[submodule "nvim/.config/nvim/site/pack/packer/start/lualine.nvim"]
+	path = nvim/.config/nvim/site/pack/packer/start/lualine.nvim
+	url = https://github.com/nvim-lualine/lualine.nvim
+[submodule "nvim/.config/nvim/site/pack/packer/start/nvim-tree.lua"]
+	path = nvim/.config/nvim/site/pack/packer/start/nvim-tree.lua
+	url = https://github.com/kyazdani42/nvim-tree.lua
+[submodule "nvim/.config/nvim/site/pack/packer/start/nvim-web-devicons"]
+	path = nvim/.config/nvim/site/pack/packer/start/nvim-web-devicons
+	url = https://github.com/nvim-tree/nvim-web-devicons
+[submodule "nvim/.config/nvim/site/pack/packer/start/plenary.nvim"]
+	path = nvim/.config/nvim/site/pack/packer/start/plenary.nvim
+	url = https://github.com/nvim-lua/plenary.nvim
+[submodule "nvim/.config/nvim/site/pack/packer/start/telescope.nvim"]
+	path = nvim/.config/nvim/site/pack/packer/start/telescope.nvim
+	url = https://github.com/nvim-telescope/telescope.nvim
+[submodule "nvim/.config/nvim/site/pack/packer/start/tagbar"]
+	path = nvim/.config/nvim/site/pack/packer/start/tagbar
+	url = https://github.com/majutshushi/tagbar
+[submodule "nvim/.config/nvim/site/pack/packer/start/vim-startify"]
+	path = nvim/.config/nvim/site/pack/packer/start/vim-startify
+	url = https://github.com/mhinz/vim-startify
+[submodule "nvim/.config/nvim/site/pack/packer/start/vim-fugitive"]
+	path = nvim/.config/nvim/site/pack/packer/start/vim-fugitive
+	url = https://github.com/tpope/vim-fugitive
+[submodule "nvim/.config/nvim/site/pack/packer/start/packer.nvim"]
+	path = nvim/.config/nvim/site/pack/packer/start/packer.nvim
+	url = https://github.com/wbthomason/packer.nvim
