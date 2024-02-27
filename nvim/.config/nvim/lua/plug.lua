@@ -30,6 +30,11 @@ return require("packer").startup({
         use({'iamcco/markdown-preview.nvim',
              run = function() vim.fn["mkdp#util#install"]() end,
         })
+        use {
+            "williamboman/mason.nvim",
+            "williamboman/mason-lspconfig.nvim",
+            "neovim/nvim-lspconfig",
+        }
     end,
     config = {
         package_root = vim.fn.stdpath("config") .. "/site/pack",

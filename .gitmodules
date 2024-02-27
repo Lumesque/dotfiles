@@ -44,3 +44,12 @@
 [submodule "nvim/.config/nvim/site/pack/packer/start/packer.nvim"]
 	path = nvim/.config/nvim/site/pack/packer/start/packer.nvim
 	url = https://github.com/wbthomason/packer.nvim
+[submodule "nvim/.config/nvim/site/pack/packer/start/nvim-lspconfig"]
+	path = nvim/.config/nvim/site/pack/packer/start/nvim-lspconfig
+	url = https://github.com/neovim/nvim-lspconfig
+[submodule "nvim/.config/nvim/site/pack/packer/start/mason.nvim"]
+	path = nvim/.config/nvim/site/pack/packer/start/mason.nvim
+	url = https://github.com/williamboman/mason.nvim
+[submodule "nvim/.config/nvim/site/pack/packer/start/mason-lspconfig.nvim"]
+	path = nvim/.config/nvim/site/pack/packer/start/mason-lspconfig.nvim
+	url = https://github.com/williamboman/mason-lspconfig.nvim
