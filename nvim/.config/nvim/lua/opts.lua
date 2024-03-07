@@ -45,3 +45,4 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
+vim.g.codeium_enabled = true

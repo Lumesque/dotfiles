@@ -22,6 +22,9 @@ require('lualine').setup{
     }
 }
 require('nvim-autopairs').setup{}
+
+
+-- LSPs
 require("mason").setup()
 require("mason-lspconfig").setup{
     ensure_installed = {"jedi_language_server"},
@@ -29,6 +32,7 @@ require("mason-lspconfig").setup{
 -- After install
 require("lspconfig").jedi_language_server.setup({}) 
 require("lspconfig").gopls.setup({}) 
+require("lspconfig").bashls.setup({}) 
 
 
 -- [[ NOTES ]] 
