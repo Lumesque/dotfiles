@@ -10,3 +10,4 @@ alias fix_font='gsettings set org.gnome.desktop.interface monospace-font-name Co
 alias gacommit='git commit -a -m'
 alias cdf='cd $(dirname $(fzf))'
 alias nf='nvim $(fzf)'
+alias dev-tmux='~/tmux_startup.sh'
