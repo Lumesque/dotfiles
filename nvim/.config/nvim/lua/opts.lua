@@ -1,6 +1,7 @@
 -- globals
 local opt = vim.opt
 local cmd = vim.api.nvim_command
+local g = vim.g
 
 -- [[ Context ]]
 opt.colorcolumn = '80'
@@ -45,4 +46,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
-vim.g.codeium_enabled = true
+-- [[ Codeium ]]
+
+g.codeium_enabled = true
+g.codeium_filetypes = {
+    ['go'] = false,
+}
