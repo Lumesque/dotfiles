@@ -13,6 +13,7 @@ require('keys')
 
 -- [[ PLUGINS ]]
 require('plug')
+require("lua/plug")
 
 -- [[ SETUP ]]
 require('nvim-tree').setup{}
@@ -23,6 +24,35 @@ require('lualine').setup{
 }
 require('nvim-autopairs').setup{}
 
+-- Why does this have to go here to work?
+require("obsidian").setup({
+    workspaces = {
+            {
+                name = "Personal",
+                path = "~/Obsidian/Personal",
+            },
+            {
+                name = "Rust",
+                path = "~/Obsidian/Rust",
+            },
+        },
+        completion = {
+            nvim_cmp = true,
+            min_chars = 2,
+        },
+        templates = {
+            subdir = "Templates",
+            date_format = "%Y-%m-%d",
+            time_format = "%H:%M",
+        },
+        picker = {
+            name = "fzf-lua",
+            mappings = {
+                new = "<C-x>",
+                insert_link="<C-l>",
+            },
+        },
+})
 
 -- LSPs
 require("mason").setup()

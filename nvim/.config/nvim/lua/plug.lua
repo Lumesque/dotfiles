@@ -48,6 +48,44 @@ return require("packer").startup({
                 vim.keymap.set('i', '<c-x>', function() return vim.fn['codeium#Clear']() end, { expr = true, silent = true})
             end
         }
+        use({
+            "epwalsh/obsidian.nvim",
+            tag = "*",
+            requires = {
+                "nvim-lua/plenary.nvim",
+                "hrsh7th/nvim-cmp",
+            },
+            config = function()
+                require("obsidian").setup({
+                    workspaces = {
+                        {
+                            name = "Personal",
+                            path = "~/Obsidian/Personal",
+                        },
+                        {
+                            name = "Rust",
+                            path = "~/Obsidian/Rust",
+                        },
+                    },
+                    completion = {
+                        nvim_cmp = true,
+                        min_chars = 2,
+                    },
+                    templates = {
+                        subdir = "Templates",
+                        date_format = "%Y-%m-%d",
+                        time_format = "%H:%M",
+                    },
+                    picker = {
+                        name = "fzf-lua",
+                        mappings = {
+                            new = "<C-x>",
+                            insert_link="<C-l>",
+                        },
+                    },
+                })
+            end,
+        })
     end,
     config = {
         package_root = vim.fn.stdpath("config") .. "/site/pack",
