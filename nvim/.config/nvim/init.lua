@@ -13,7 +13,7 @@ require('keys')
 
 -- [[ PLUGINS ]]
 require('plug')
-require("lua/plug")
+--require("lua/plug")
 
 -- [[ SETUP ]]
 require('nvim-tree').setup{}
