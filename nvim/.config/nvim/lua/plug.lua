@@ -77,7 +77,7 @@ return require("packer").startup({
                         time_format = "%H:%M",
                     },
                     picker = {
-                        name = "fzf-lua",
+                        name = "telescope.nvim",
                         mappings = {
                             new = "<C-x>",
                             insert_link="<C-l>",

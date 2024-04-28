@@ -51,4 +51,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 g.codeium_enabled = true
 g.codeium_filetypes = {
     ['go'] = false,
+    -- Disable md for obsidian use so obsidian can correctly be used
+    ['md'] = false,
+    ['markdown'] = false,
 }
