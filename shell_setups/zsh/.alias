@@ -14,4 +14,5 @@ alias dev-tmux='~/tmux_startup.sh'
 alias obs='cd /home/lumesque/Obsidian'
 alias rust_notes='cd /home/lumesque/Obsidian/Rust'
 alias pers_notes='cd /home/lumesque/Obsidian/Personal'
+alias s_zsh='source $(/home/lumesque/.local/bin/cfg zsh)'
 alias cfg="cfg -o"
