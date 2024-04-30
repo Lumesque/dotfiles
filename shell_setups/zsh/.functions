@@ -22,3 +22,24 @@ alias $name='$command'
 EOF
     source ~/zsh/.alias
 }
+
+add_cfg () {
+    name="$1"
+    config="$2"
+    if [ -z "$name" -o -z "$config" ] ; then
+    cat << EOF
+Usage: add_cfg name 'config'
+adds config to .cfg list for use in cfg
+EOF
+    return 1
+    fi
+    if [ -f "$config" ] ; then
+    cat << EOF >> ~/.local/bin/cfg.conf
+$name = "$config"
+EOF
+    else
+        echo "Config file $config does not exist" >&2
+        return 2
+    fi
+
+}

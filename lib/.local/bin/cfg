@@ -1,0 +1,129 @@
+#!/usr/bin/bash
+
+declare -A CONFIGS
+
+show_help() {
+    cat << EOF
+Usage: $0 [-h] [-c CONFIG_FILE] [-d] [-e EDITOR] [-o] <key>
+Print out the config of a current registered key. If -e is provided, will open
+using the provided editor. If -o is provided, will open with user default editor (Currently $EDITOR.)
+Current registered configs: ${valid_configs::-2}
+Current valid aliases: ${valid_aliases::-2}
+Use -c to register from other configs
+Use -d for debug
+EOF
+}
+
+register_config() {
+    local file
+    # Replace quotes and tilde with $HOME for realpath
+    file=$(sed "s/[\"\']//g" <<< "${2/\~/$HOME/}" | xargs realpath)
+    # Register in all upper case for searches
+    CONFIGS[${1^^}]="$file"
+    if ! [ -z "$DEBUG" ] ; then
+        echo "Registered key $1 with $file"
+    fi
+    return 0
+}
+
+register_alias() {
+    # Registers aliases for paths to other locations, then registers them as if they
+    # were the original key
+    local key
+    local _alias
+    _alias="${2^^}"
+    key="${1^^}"
+    f="${CONFIGS[$(sed "s/[\"\']//g" <<< "${_alias/\~/$HOME/}")]}"
+    if [ -z "$f" ] ; then
+        echo "No config found for $key" >&2
+        exit 1
+    fi
+    if ! [ -z "$DEBUG" ] ; then
+        echo "Registered alias $key -> $f"
+    fi
+}
+
+register_config_from_file() {
+    shopt -s lastpipe
+    while read -r A B ; do
+        if [[ "$A" == "#"* || "$A" == "["* ]] ; then
+            local sect_name
+            perl -pe 's/[\[\]]//g' <<< "$A" | read sect_name
+            if [[ "$sect_name" == "aliases" ]]; then
+                in_alias="true"
+            fi
+            continue
+        elif [ -z "$B" ] ; then
+            continue
+        fi
+        if [ -z "$in_alias" ] ; then
+            register_config "$A" "$B"
+            valid_configs+="$A, "
+        else
+            register_alias "$A" "$B"
+            valid_aliases+="$A->$B, "
+        fi
+    done < <(awk -F '=' '{print $1,$2}' $1)
+}
+
+script_dir="$(dirname $0)"
+valid_configs=""
+valid_aliases=""
+register_config_from_file "${config_file:=$script_dir/cfg.conf}"
+
+while getopts ":hc:de:o" opt ; do
+    case $opt in
+        h)
+            show_help
+            exit 0
+            ;;
+        c) 
+            config_file="$OPTARG"
+            ;;
+        d)
+            DEBUG="true"
+            ;;
+        e)
+            EDITOR="$OPTARG"
+            open="true"
+            ;;
+        o)
+            open="true"
+            ;;
+        \?)
+            echo "Invalid option: -$opt" >&2
+            exit 1
+            ;;
+    esac
+done
+
+shift $(($OPTIND-1))
+
+if [ $# -ne 1 ] ; then
+    show_help
+    exit 1
+fi
+
+
+if ! [ -z "$DEBUG" ] ; then
+    printf "CONFIG CONTENTS::\n"
+    for x in "${!CONFIGS[@]}" ; do
+        printf "[%s] = %s\n" "$x" "${CONFIGS[$x]}"
+    done
+fi
+
+f="${CONFIGS[${1^^}]}"
+if [ -z "$f" ] ; then
+    echo "No config found for $1" >&2
+    exit 1
+elif ! [ -f "$f" ] ; then
+    echo "Invalid config path::$f received"
+    show_help
+    exit 2
+fi
+
+if [ -z "$open" ] ; then
+    echo $f
+else
+    $EDITOR $f
+fi

@@ -1,2 +1,2 @@
 source ~/.cargo/env
-export PATH=$PATH:/home/lumesque/.local/bin
+export PATH=$PATH:/home/lumesque/.local/bin:/home/lumesque/bin
