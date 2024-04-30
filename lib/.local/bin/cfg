@@ -41,6 +41,7 @@ register_alias() {
     if ! [ -z "$DEBUG" ] ; then
         echo "Registered alias $key -> $f"
     fi
+    register_config "$key" "$f"
 }
 
 register_config_from_file() {
