@@ -2,25 +2,34 @@
 shopt -s lastpipe
 
 declare -A CONFIGS
+# Declare for processing after all config files are processed
+declare -A ALIASES
+# Have other configs be the paths to source only if the section name is configs
+configs=()
 
 show_help() {
     cat << EOF
-Usage: $0 [-h] [-c CONFIG_FILE] [-d] [-e EDITOR] [-o] <key>
+Usage: $0 [-h] [-s] [-d] [-e EDITOR] [-o] <key> <configs>
 Print out the config of a current registered key. If -e is provided, will open
 using the provided editor. If -o is provided, will open with user default editor (Currently $EDITOR.)
 Current registered configs: ${valid_configs::-2}
 Current valid aliases: ${valid_aliases::-2}
-Use -c to register from other configs
 Use -d for debug
+Use -s for suppressing overwrite messages
 EOF
 }
 
 register_config() {
     local file
+    local cfg_name
     # Replace quotes and tilde with $HOME for realpath
     file=$(sed "s/[\"\']//g" <<< "${2/\~/$HOME/}" | xargs realpath)
+    cfg_name="${1^^}"
+    if [ -z "$suppress" -a -n "$(grep "$cfg_name" <<< "${!CONFIGS[@]}")" ] ; then
+        echo "$cfg_name already registered and is being overwritten, if you would like to not see this warning please use the -s option" >&2
+    fi
     # Register in all upper case for searches
-    CONFIGS[${1^^}]="$file"
+    CONFIGS[${cfg_name}]="$file"
     if ! [ -z "$DEBUG" ] ; then
         echo "Registered key $1 with $file"
     fi
@@ -28,6 +37,18 @@ register_config() {
 }
 
 register_alias() {
+    local cfg_name
+    cfg_name="${1^^}"
+    if [ -z "$suppress" -a -n "$(grep "$cfg_name" <<< "${!ALIASES[@]}")" ] ; then
+        echo "$cfg_name already registered as an alias and is being overwritten, if you would like to not see this warning please use the -s option" >&2
+    fi
+    if ! [ -z "$DEBUG" ] ; then
+        echo "Registered alias $1 with $2"
+    fi
+    ALIASES[${cfg_name}]="${2^^}"
+}
+
+process_alias() {
     # Registers aliases for paths to other locations, then registers them as if they
     # were the original key
     local key
@@ -36,25 +57,32 @@ register_alias() {
     key="${1^^}"
     f="${CONFIGS[$(sed "s/[\"\']//g" <<< "${_alias/\~/$HOME/}")]}"
     if [ -z "$f" ] ; then
-        echo "No config found for $key" >&2
+        echo "No correct config found for alias $key" >&2
         exit 1
-    fi
-    if ! [ -z "$DEBUG" ] ; then
-        echo "Registered alias $key -> $f"
     fi
     register_config "$key" "$f"
 }
 
 register_config_from_file() {
+    local in_alias
+    local in_config
     while read -r A B ; do
         if [[ "$A" == "#"* || "$A" == "["* ]] ; then
             local sect_name
             perl -pe 's/[\[\]]//g' <<< "$A" | read sect_name
             if [[ "$sect_name" == "aliases" ]]; then
                 in_alias="true"
+                in_config=""
+            elif [[ "$sect_name" == "configs" ]]; then
+                in_config="true"
+                in_alias=""
+            else
+                in_config=""
+                in_alias=""
             fi
             continue
         elif [ -z "$B" ] ; then
+            [ -n "$in_config" ] && configs+=("$A")
             continue
         fi
         if [ -z "$in_alias" ] ; then
@@ -67,19 +95,12 @@ register_config_from_file() {
     done < <(awk -F '=' '{print $1,$2}' $1)
 }
 
-script_dir="$(dirname $0)"
-valid_configs=""
-valid_aliases=""
-register_config_from_file "${config_file:=$script_dir/cfg.conf}"
 
-while getopts ":hc:de:o" opt ; do
+while getopts ":hde:os" opt ; do
     case $opt in
         h)
             show_help
             exit 0
-            ;;
-        c) 
-            config_file="$OPTARG"
             ;;
         d)
             DEBUG="true"
@@ -87,6 +108,9 @@ while getopts ":hc:de:o" opt ; do
         e)
             EDITOR="$OPTARG"
             open="true"
+            ;;
+        s)
+            suppress="true"
             ;;
         o)
             open="true"
@@ -98,28 +122,45 @@ while getopts ":hc:de:o" opt ; do
     esac
 done
 
-shift $(($OPTIND-1))
+script_dir="$(dirname $0)"
+valid_configs=""
+valid_aliases=""
+register_config_from_file "${CONFIG_FILE:=$script_dir/cfg.conf}"
 
-if [ $# -ne 1 ] ; then
+shift $(($OPTIND-1))
+for x in "${!ALIASES[@]}" ; do
+    process_alias "$x" "${ALIASES[$x]}"
+done
+
+cfg_name="${1^^}"
+if [ $# -lt 1 ] ; then
     show_help
     exit 1
 fi
+shift
+
+for arg ; do
+    register_config_from_file "$arg"
+done
+
+for x in "${configs[@]}" ; do
+    register_config_from_file "$x"
+done
 
 
-if ! [ -z "$DEBUG" ] ; then
+if [ -n "$DEBUG" ] ; then
     printf "CONFIG CONTENTS::\n"
     for x in "${!CONFIGS[@]}" ; do
         printf "[%s] = %s\n" "$x" "${CONFIGS[$x]}"
     done
 fi
 
-f="${CONFIGS[${1^^}]}"
+f="${CONFIGS[${cfg_name}]}"
 if [ -z "$f" ] ; then
-    echo "No config found for $1" >&2
+    echo "No config file registered for $cfg_name" >&2
     exit 1
 elif ! [ -f "$f" ] ; then
-    echo "Invalid config path::$f received"
-    show_help
+    echo "File Not Found [Errno 2]::$f"
     exit 2
 fi
 
