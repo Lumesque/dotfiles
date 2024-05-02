@@ -1,0 +1,15 @@
+export alias ls = ls -a
+alias home = cd ~
+alias repos = cd /mnt/main
+alias bot = cd /e/async_discord_bot
+alias games = cd ~/.local/share/Steam/steamapps/common
+alias mod_menu = /opt/r2modman/r2modman.AppImage --no-sandbox
+alias fix_font = gsettings set org.gnome.desktop.interface monospace-font-name CodeNewRomanNerdFont
+alias gacommit = git commit -a -m
+alias dev-tmux = ~/tmux_startup.sh
+alias obs = cd /home/lumesque/Obsidian
+alias rust_notes = cd /home/lumesque/Obsidian/Rust
+alias pers_notes = cd /home/lumesque/Obsidian/Personal
+alias cfg = cfg -o
+alias test = printf "hello"
+alias others = printf "himom"

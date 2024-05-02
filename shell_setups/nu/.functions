@@ -1,0 +1,8 @@
+
+def --env up [this: int] {
+    mut x = $this
+    while $x > 0 {
+        cd ..
+        $x -= 1
+    }
+}
