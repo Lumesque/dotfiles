@@ -1,2 +1,13 @@
 source ~/.cargo/env
-export PATH=$PATH:/home/lumesque/.local/bin:/home/lumesque/bin
+
+function add_to_path {
+    case ":$PATH:" in
+        *:"$1":*) ;;
+        *) PATH="$PATH:$1" ;;
+    esac
+}
+add_to_path /home/lumesque/.local/bin
+add_to_path /home/lumesque/bin
+add_to_path /home/lumesque/.local/share/gem/ruby/3.0.0/bin
+
+unset -f add_to_path

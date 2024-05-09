@@ -6,3 +6,7 @@ def --env up [this: int] {
         $x -= 1
     }
 }
+
+export def greet [name] {
+    echo "Hello, $name!"
+}

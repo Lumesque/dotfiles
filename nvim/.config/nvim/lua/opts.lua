@@ -54,4 +54,5 @@ g.codeium_filetypes = {
     -- Disable md for obsidian use so obsidian can correctly be used
     ['md'] = false,
     ['markdown'] = false,
+    ["rust"] = false,
 }

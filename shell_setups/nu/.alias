@@ -11,5 +11,6 @@ alias obs = cd /home/lumesque/Obsidian
 alias rust_notes = cd /home/lumesque/Obsidian/Rust
 alias pers_notes = cd /home/lumesque/Obsidian/Personal
 alias cfg = cfg -o
-alias test = printf "hello"
 alias others = printf "himom"
+export alias test = printf "test!"
+export alias testing = printf "testing!"
