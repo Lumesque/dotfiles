@@ -27,11 +27,7 @@
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
-  # console = {
-  #   font = "Lat2-Terminus16";
-  #   keyMap = "us";
-  #   useXkbConfig = true; # use xkb.options in tty.
-  # };
+  
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
@@ -58,6 +54,11 @@
   # Enable touchpad support (enabled default in most desktopManager).
   services.xserver.libinput.enable = true;
 
+  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
+    "spotify"
+    "discord"
+  ];
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.lumesque = {
     isNormalUser = true;
@@ -67,13 +68,11 @@
       firefox
       tree
       brave
+      spotify
+      discord
     ];
   };
 
-  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
-    "spotify"
-    "discord"
-  ];
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -87,8 +86,18 @@
     stow
     rustc
     cargo
+    nerdfonts
+    tmux
   ];
 
+  fonts.fontDir.enable = true;
+  # May have to run fc-cache -r for this to work, as it won't know where to look otherwise
+  console = {
+    font = "CodeNewRoman";
+    #keyMap = "us";
+    useXkbConfig = true; # use xkb.options in tty.
+  };
+  
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
