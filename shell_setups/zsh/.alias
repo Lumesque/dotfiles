@@ -16,3 +16,5 @@ alias rust_notes='cd /home/lumesque/Obsidian/Rust'
 alias pers_notes='cd /home/lumesque/Obsidian/Personal'
 alias s_zsh='source $(/home/lumesque/.local/bin/cfg zsh)'
 alias cfg="cfg -o"
+alias s='sudo '
+alias d_rust='rustup default stable-x86_64-unknown-linux-gnu'
