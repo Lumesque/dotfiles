@@ -12,6 +12,10 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  # Use this to set it to regular speakers
+  #boot.extraModprobeConfig = "
+  # options snd-intel-dspcfg dsp_driver=1
+  # ";
 
   networking.hostName = "nixos"; # Define your hostname.
   # Pick only one of the below networking options.
@@ -49,7 +53,9 @@
 
   # Enable sound.
   sound.enable = true;
-  # hardware.pulseaudio.enable = true;
+  # enable pulse audio DEFAULT FOR MOST AUDIO DRIVERS
+  hardware.pulseaudio.enable = true;
+  hardware.pulseaudio.support32Bit = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.xserver.libinput.enable = true;
@@ -62,8 +68,11 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.lumesque = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-    shell = "/run/current-system/sw/bin/zsh";
+    extraGroups = [ 
+      "wheel" 
+      "audio"
+    ]; # Enable ‘sudo’ for the user.
+    shell = pkgs.zsh;
     packages = with pkgs; [
       firefox
       tree
@@ -72,6 +81,9 @@
       discord
     ];
   };
+
+  # System programs
+  programs.zsh.enable = true;
 
 
   # List packages installed in system profile. To search, run:
@@ -84,10 +96,11 @@
     zsh
     python312
     stow
+    rustup
     rustc
-    cargo
     nerdfonts
     tmux
+    gcc
   ];
 
   fonts.fontDir.enable = true;
