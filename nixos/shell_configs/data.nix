@@ -13,6 +13,7 @@ in pkgs.mkShell {
     python-pkgs.node2vec
     python-pkgs.scikit-learn
     python-pkgs.ipython
+    python-pkgs.jupyter
   ]))
  ];
  nativeBuildInputs = with pkgs; [
