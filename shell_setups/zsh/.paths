@@ -1,13 +1,21 @@
-source ~/.cargo/env
-
 function add_to_path {
+    [ -d $1 ] || print_msg "Path $1 does not exist, skipping..." && return 1
     case ":$PATH:" in
         *:"$1":*) ;;
         *) PATH="$PATH:$1" ;;
     esac
 }
+
+function source_path {
+    [ -f $1 ] || print_msg "Path $1 does not exist or is not a directory, skipping..." && return 1
+    source $1
+}
+
 add_to_path /home/lumesque/.local/bin
 add_to_path /home/lumesque/bin
 add_to_path /home/lumesque/.local/share/gem/ruby/3.0.0/bin
+source_path ~/.cargo/env
+
 
 unset -f add_to_path
+unset -f source_path
