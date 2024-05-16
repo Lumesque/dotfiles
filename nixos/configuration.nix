@@ -101,6 +101,10 @@
     nerdfonts
     tmux
     gcc
+    ruby
+    openssl
+    pkg-config
+    gnumake
   ];
 
   fonts.fontDir.enable = true;
