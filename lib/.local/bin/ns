@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+### Finds given env name and uses it for nix shell
+#
+show_help () {
+    cat << EOF
+Usage: $(basename $0) [-e] [-h] shell_name
+Find a given shell nix file, and execute it with the -e flag
+EOF
+}
+
+while getopts ":he" opt ; do
+    case $opt in
+        h) show_help ; exit 0                   ;;
+        e) _exec="true"                         ;;
+        *) echo "Invalid opt $opt" >&2 ; exit 1 ;;
+    esac
+done
+
+shift $(($OPTIND - 1))
+
+if [ $# -ne 1 ] ; then
+    show_help
+    exit 1
+fi
+
+shell="$1"
+
+shell_dirs=("/home/lumesque/dotfiles/nixos/shell_configs")
+
+if [[ "${shell##*.}" != "nix" ]] ; then
+    shell+=".nix"
+fi
+
+
+for _dir in ${shell_dirs[@]} ; do
+    _p="$_dir/$shell"
+    if [ -f "$_p" ] ; then
+        # If they want to leave, let them
+        [ -z "$_exec" ] && echo "$_p" || eval "nix-shell $_p"
+        exit 0
+    fi
+done
+
+echo "Unable to find $shell in any of $shell_dirs"
+exit 1
