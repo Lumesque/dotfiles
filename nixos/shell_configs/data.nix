@@ -1,3 +1,5 @@
+
+# package made to do some data stuff
 let
   pkgs = import <nixpkgs> {};
 in pkgs.mkShell {

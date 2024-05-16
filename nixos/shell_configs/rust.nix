@@ -1,13 +1,9 @@
 let
   pkgs = import <nixpkgs> {};
 in pkgs.mkShell {
- packages = [
-  (pkgs.python312.withPackages (python-pkgs: [
-    python-pkgs.ipython
-    python-pkgs.maturin
-  ]))
-  pkgs.rustup
-  pkgs.rustc
+ packages = with pkgs; [
+  rustup
+  rustc
  ]; nativeBuildInputs = with pkgs; [
    stdenv.cc.cc.lib
  ];

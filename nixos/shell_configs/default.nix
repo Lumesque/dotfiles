@@ -5,7 +5,6 @@ in pkgs.mkShell {
   (pkgs.python312.withPackages (python-pkgs: [
     python-pkgs.pandas
     python-pkgs.numpy
-    python-pkgs.requests
     python-pkgs.ipython
   ]))
  ];
