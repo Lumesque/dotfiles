@@ -3,10 +3,31 @@
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 { config, lib, pkgs, ... }:
 
+let 
+  VERSION="23.11";
+  dotfiles = builtins.fetchGit {
+    url = "https://github.com/Lumesque/dotfiles";
+    ref = "linux_config";
+    name = "dot-files";
+    rev = "16e8fdbc68d412e7c350e40a9aa6f60364f03cd6";
+  };
+  shell_configs = {
+    zsh = "${dotfiles}/shell_setups/zsh/.zsh.config";
+  };
+  stow_files = [
+    "${dotfiles}/shell_setups"
+    "${dotfiles}/nvim"
+    "${dotfiles}/vim"
+    "${dotfiles}/tmux"
+    "${dotfiles}/lib"
+  ];
+in
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      # For this line to run you must add the channel https://github.com/nix-community/home-manager/archive/master.tar.gz, or /release-<version>.tar.gz
+      <home-manager/nixos>
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -81,9 +102,49 @@
       discord
     ];
   };
-
-  # System programs
+  # Let the rest be handled by home-manager
   programs.zsh.enable = true;
+
+  home-manager.users.lumesque = { pkgs, ...}: {
+    #shell = pkgs.zsh;
+    programs.zsh = {
+      enable = true;
+      enableCompletion = true;
+      autosuggestion.enable = true;
+      syntaxHighlighting.enable = true;
+      autocd = true;
+   #initExtraBeforeCompInit = "";
+        shellAliases = {
+	  ls = "ls -aF --color";
+	  home = "cd ~";
+	  repos = "cd /mnt/main";
+	  gacommit = "git commit -a -m";
+	  cdf = "cd $(dirname $(fzf))";
+	  nf = "nvim $(fzf)";
+	  __state_version__ = "echo ${VERSION}";
+        };
+        oh-my-zsh = {
+          enable = true;
+          plugins = [ "git" "python" "vi-mode" "virtualenv" ];
+	  theme = "obraun";
+	  extraConfig = ''
+	  [ -f ${shell_configs.zsh} ] && source ${shell_configs.zsh} 
+	  '';
+	};
+
+    };
+
+    programs.git = {
+      enable = true;
+      userName = "Lumesque";
+      userEmail = "luckie.joshua.c@gmail.com";
+      extraConfig = {
+        credential = { helper = "store"; };
+      };
+    };
+      # This should match the config state version EXACTLY
+    home.stateVersion = "${VERSION}";
+  };
 
 
   # List packages installed in system profile. To search, run:
@@ -105,6 +166,7 @@
     openssl
     pkg-config
     gnumake
+    fzf
   ];
 
   fonts.fontDir.enable = true;
@@ -113,6 +175,14 @@
     font = "CodeNewRoman";
     #keyMap = "us";
     useXkbConfig = true; # use xkb.options in tty.
+  };
+
+  # Way to implement scripting after builds
+  system.activationScripts = {
+    stage.text = 
+    ''
+    echo "running activation scripts from configuration.nix"
+    '';
   };
   
   # Some programs need SUID wrappers, can be configured further or are
@@ -155,7 +225,6 @@
   # and migrated your data accordingly.
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
-  system.stateVersion = "23.11"; # Did you read the comment?
+  system.stateVersion = "${VERSION}"; # Did you read the comment?
 
 }
-
