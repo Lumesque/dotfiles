@@ -6,20 +6,28 @@ show_help () {
     cat << EOF
 Usage: $(basename $0) [-e] [-h] shell_name
 Find a given shell nix file, and execute it with the -e flag
+List all shells possible with the -l flag
 EOF
 }
 
-while getopts ":he" opt ; do
+list_shells() {
+    for _dir in ${shell_dirs[@]} ; do
+         find $_dir -name "*.nix" -exec basename {} .nix \;| paste -sd ',' -
+    done
+}
+
+while getopts ":hel" opt ; do
     case $opt in
         h) show_help ; exit 0                   ;;
         e) _exec="true"                         ;;
+        l) _list="true"                         ;;
         *) echo "Invalid opt $opt" >&2 ; exit 1 ;;
     esac
 done
 
 shift $(($OPTIND - 1))
 
-if [ $# -ne 1 ] ; then
+if [ $# -ne 1 -a -z "$_list" ] ; then
     show_help
     exit 1
 fi
@@ -27,6 +35,11 @@ fi
 shell="$1"
 
 shell_dirs=("/home/lumesque/dotfiles/nixos/shell_configs")
+
+if [ -n "$_list" ] ; then
+    list_shells
+    exit 0
+fi
 
 if [[ "${shell##*.}" != "nix" ]] ; then
     shell+=".nix"
