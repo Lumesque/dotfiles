@@ -1,8 +1,16 @@
 function add_to_path {
+    local PREPEND_PATH="$2"
     [ -d $1 ] || eval 'print_msg "Path $1 does not exist, skipping..." ; return 1'
+
     case ":$PATH:" in
         *:"$1":*) ;;
-        *) PATH="$PATH:$1" ;;
+        *) \
+        if [ -z "$PREPEND_PATH" ] ; then
+            PATH="$PATH:$1" ; 
+        else 
+            PATH="$1:$PATH" 
+        fi
+        ;;
     esac
 }
 
@@ -14,6 +22,7 @@ function source_path {
 add_to_path /home/lumesque/.local/bin
 add_to_path /home/lumesque/bin
 add_to_path /home/lumesque/.local/share/gem/ruby/3.0.0/bin
+add_to_path /home/lumesque/.local/bin/zig-linux-x86_64-0.13.0-dev.340+d750a78b2 "prepend"
 source_path ~/.cargo/env
 export PATH="$PATH"
 

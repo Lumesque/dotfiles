@@ -4,7 +4,6 @@ local cmd = vim.api.nvim_command
 local g = vim.g
 
 -- [[ Context ]]
-opt.colorcolumn = '80'
 opt.number = true
 opt.relativenumber = true
 opt.scrolloff = 4

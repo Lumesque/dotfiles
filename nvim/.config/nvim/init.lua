@@ -1,7 +1,7 @@
 --[[ init.lua ]]
 
 -- [[ LEADER ]]
-vim.g.mapleader = ","
+vim.g.mapleader = " "
 vim.g.localleader = "\\"
 
 
@@ -34,6 +34,10 @@ require("obsidian").setup({
             {
                 name = "Rust",
                 path = "~/Obsidian/Rust",
+            },
+            {
+                name = "Go",
+                path = "~/Obsidian/Go",
             },
         },
         completion = {
